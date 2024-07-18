@@ -1,5 +1,5 @@
 async function userLoader({ request, params }) {
-  const res = await fetch('http://127.0.0.1:5555/check_session', {
+  const res = await fetch('http://127.0.0.1:5555/api/check_session', {
       method: 'GET',
       credentials: 'include'
     })
@@ -14,19 +14,19 @@ async function userLoader({ request, params }) {
 }
 
 async function petListLoader({ request, params }) {
-  const res = await fetch("http://127.0.0.1:5555/pets")
+  const res = await fetch("http://127.0.0.1:5555/api/pets")
     .then(resp => resp.json())
   return res
 }
 
 async function petDetailsLoader({ request, params }) {
-  const res = await fetch(`http://127.0.0.1:5555/pets/${params.id}`)
+  const res = await fetch(`http://127.0.0.1:5555/api/pets/${params.id}`)
     .then(resp => resp.json())
   return res
 }
 
 async function ownersLoader({ request, params }) {
-  const res = await fetch(`http://127.0.0.1:5555/owners`)
+  const res = await fetch(`http://127.0.0.1:5555/api/owners`)
     .then(resp => resp.json())
   return res
 }

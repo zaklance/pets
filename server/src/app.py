@@ -27,13 +27,18 @@
 # create a secret key: python -c 'import os; print(os.urandom(16))'
 
 import os
-from flask import Flask, request, make_response, jsonify, session
+from flask import Flask, request, make_response, jsonify, session, render_template
 from models import db, Pet, Owner, User
 from flask_migrate import Migrate
 from flask_cors import CORS
 
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder='../../client/my-app/dist',
+    template_folder='../../client/my-app/dist'
+)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URI']  # how to connect to the db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # optional performance thing
 app.secret_key = os.environ['SECRET_KEY'] # grab the secret key from env variables
@@ -44,6 +49,10 @@ Migrate(app, db)  # set up db migration tool (alembic)
 CORS(app, supports_credentials=True)  # set up cors
 
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('index.html')
+
 @app.route('/')
 def hello():
     json_string = jsonify({'test': 'hello'})  # turn dict into json
@@ -51,14 +60,14 @@ def hello():
     return web_resp
 
 
-@app.route('/dogs')
+@app.route('/api/dogs')
 def dogs():
     # query db for all dog pets
     all_dogs = Pet.query.filter(Pet.type == 'dog').all()
     all_dog_dicts = [d.to_dict() for d in all_dogs]  # turn all dog objs into dicts
     return all_dog_dicts, 200
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()  # get user data
 
@@ -76,7 +85,7 @@ def login():
 
     return user.to_dict(), 200
 
-@app.route('/signup', methods=['POST'])
+@app.route('/api/signup', methods=['POST'])
 def signup():
     data = request.get_json()
 
@@ -95,12 +104,12 @@ def signup():
 
     return new_user.to_dict(), 201
 
-@app.route('/logout', methods=['DELETE'])
+@app.route('/api/logout', methods=['DELETE'])
 def logout():
     session.pop('user_id', None)  # remove the login cookie (None prevents the key error)
     return {}, 204
 
-@app.route('/check_session')
+@app.route('/api/check_session')
 def check_session():
     # get the cookie
     user_id = session.get('user_id')
@@ -116,7 +125,7 @@ def check_session():
     
     return user.to_dict(), 200
 
-@app.route('/pets', methods=['GET', 'POST'])
+@app.route('/api/pets', methods=['GET', 'POST'])
 def all_pets():
     t = get_all_owners()
     print(t[0])
@@ -146,7 +155,7 @@ def all_pets():
         return new_pet.to_dict(), 201
 
 
-@app.route('/pets/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
+@app.route('/api/pets/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
 def pet_by_id(id):
     pet = Pet.query.filter(Pet.id == id).first()
 
@@ -187,11 +196,11 @@ def pet_by_id(id):
         return {}, 204
 
 
-@app.get('/owners')  # @app.route('/owners', methods=['GET'])
+@app.get('/api/owners')  # @app.route('/owners', methods=['GET'])
 def get_all_owners():
     owners = Owner.query.all()
     return [o.to_dict() for o in owners], 200
 
-@app.post('/owners') # @app.route('/owners', methods=['POST'])
+@app.post('/api/owners') # @app.route('/owners', methods=['POST'])
 def post_owner(): 
     pass
