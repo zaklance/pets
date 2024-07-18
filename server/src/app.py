@@ -53,11 +53,11 @@ CORS(app, supports_credentials=True)  # set up cors
 def not_found(e):
     return render_template('index.html')
 
-@app.route('/')
-def hello():
-    json_string = jsonify({'test': 'hello'})  # turn dict into json
-    web_resp = make_response(json_string, 200)  # build a web resp
-    return web_resp
+# @app.route('/')
+# def hello():
+#     json_string = jsonify({'test': 'hello'})  # turn dict into json
+#     web_resp = make_response(json_string, 200)  # build a web resp
+#     return web_resp
 
 
 @app.route('/api/dogs')
