@@ -110,7 +110,7 @@ class User(db.Model, SerializerMixin):
     
     @password.setter
     def password(self, new_password):
-        hash = bcrypt.generate_password_hash(new_password.encode('utf-8'), bcrypt.gensalt())
+        hash = bcrypt.generate_password_hash(new_password.encode('utf-8')).decode('utf-8')
         self._password = hash
 
     def authenticate(self, password):
