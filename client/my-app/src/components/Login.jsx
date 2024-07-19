@@ -11,7 +11,7 @@ export default function Login() {
       'password': event.target.password.value
     }
 
-    fetch('https://pets-app-ksmt.onrender.com/api/login', {
+    fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

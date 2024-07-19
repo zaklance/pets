@@ -15,7 +15,7 @@ export default function DogForm() {
 
   function handleSubmit(event) {
     event.preventDefault()
-    fetch('https://pets-app-ksmt.onrender.com/api/pets', {
+    fetch('/api/pets', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

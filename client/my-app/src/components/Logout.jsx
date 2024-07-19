@@ -5,7 +5,7 @@ export default function Logout() {
   const [isLoggedOut, setIsLoggedOut] = useState()
 
   useEffect(() => {
-    fetch('https://pets-app-ksmt.onrender.com/api/logout', {
+    fetch('/api/logout', {
       method: 'DELETE',
       credentials: 'include'
     })

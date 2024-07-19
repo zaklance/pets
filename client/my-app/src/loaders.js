@@ -1,5 +1,5 @@
 async function userLoader({ request, params }) {
-  const res = await fetch('https://pets-app-ksmt.onrender.com/api/check_session', {
+  const res = await fetch('/api/check_session', {
       method: 'GET',
       credentials: 'include'
     })
@@ -14,19 +14,19 @@ async function userLoader({ request, params }) {
 }
 
 async function petListLoader({ request, params }) {
-  const res = await fetch("https://pets-app-ksmt.onrender.com/api/pets")
+  const res = await fetch("/api/pets")
     .then(resp => resp.json())
   return res
 }
 
 async function petDetailsLoader({ request, params }) {
-  const res = await fetch(`https://pets-app-ksmt.onrender.com/api/pets/${params.id}`)
+  const res = await fetch(`/api/pets/${params.id}`)
     .then(resp => resp.json())
   return res
 }
 
 async function ownersLoader({ request, params }) {
-  const res = await fetch(`https://pets-app-ksmt.onrender.com/api/owners`)
+  const res = await fetch(`/api/owners`)
     .then(resp => resp.json())
   return res
 }
